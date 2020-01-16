@@ -3,6 +3,8 @@ package de.holisticon.axon.bank.context.account.aggregate;
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
 import de.holisticon.axon.bank.context.account.command.CreateBankAccountCommand;
+import de.holisticon.axon.bank.context.account.command.WithdrawAmountCommand;
+import de.holisticon.axon.bank.context.account.event.AmountWithdrawnEvent;
 import de.holisticon.axon.bank.context.account.event.BankAccountCreatedEvent;
 import java.math.BigDecimal;
 import lombok.AccessLevel;
@@ -37,5 +39,16 @@ public class AccountAggregate {
   void on(BankAccountCreatedEvent evt)  {
     this.accountId = evt.getAccountId();
     this.currentBalance = evt.getInitialBalance();
+  }
+
+
+  @CommandHandler
+  void handle(WithdrawAmountCommand cmd) {
+    apply(AmountWithdrawnEvent.builder().accountId(accountId).amount(cmd.getAmount()).build());
+  }
+
+  @EventSourcingHandler
+  void on(AmountWithdrawnEvent evt) {
+    this.currentBalance = currentBalance.subtract(evt.getAmount());
   }
 }

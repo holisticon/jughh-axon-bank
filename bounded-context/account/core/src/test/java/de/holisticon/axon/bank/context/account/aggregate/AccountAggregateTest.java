@@ -3,6 +3,8 @@ package de.holisticon.axon.bank.context.account.aggregate;
 import com.tngtech.jgiven.annotation.ProvidedScenarioState;
 import com.tngtech.jgiven.junit5.ScenarioTest;
 import de.holisticon.axon.bank.context.account.command.CreateBankAccountCommand;
+import de.holisticon.axon.bank.context.account.command.WithdrawAmountCommand;
+import de.holisticon.axon.bank.context.account.event.AmountWithdrawnEvent;
 import de.holisticon.axon.bank.context.account.event.BankAccountCreatedEvent;
 import io.toolisticon.addons.axon.jgiven.aggregate.AggregateFixtureGiven;
 import io.toolisticon.addons.axon.jgiven.aggregate.AggregateFixtureThen;
@@ -12,7 +14,8 @@ import java.util.UUID;
 import org.axonframework.test.aggregate.AggregateTestFixture;
 import org.junit.jupiter.api.Test;
 
-class AccountAggregateTest extends ScenarioTest<AggregateFixtureGiven<AccountAggregate>, AggregateFixtureWhen<AccountAggregate>, AggregateFixtureThen<AccountAggregate>> {
+class AccountAggregateTest extends
+  ScenarioTest<AggregateFixtureGiven<AccountAggregate>, AggregateFixtureWhen<AccountAggregate>, AggregateFixtureThen<AccountAggregate>> {
 
   @ProvidedScenarioState
   private final AggregateTestFixture<AccountAggregate> fixture = new AggregateTestFixture<>(AccountAggregate.class);
@@ -24,11 +27,24 @@ class AccountAggregateTest extends ScenarioTest<AggregateFixtureGiven<AccountAgg
   void create_account() {
     given()
       .noPriorActivity()
-      ;
+    ;
     when()
       .command(CreateBankAccountCommand.builder().accountId(ACCOUNT_ID).customerId(CUSTOMER_ID).build())
-      ;
+    ;
     then()
       .expectEvent(BankAccountCreatedEvent.builder().accountId(ACCOUNT_ID).customerId(CUSTOMER_ID).initialBalance(BigDecimal.ZERO).build());
+  }
+
+  @Test
+  void withdraw_amount() {
+    given()
+      .event(BankAccountCreatedEvent.builder().accountId(ACCOUNT_ID).customerId(CUSTOMER_ID).initialBalance(BigDecimal.ZERO).build())
+    ;
+    when()
+      .command(WithdrawAmountCommand.builder().accountId(ACCOUNT_ID).amount(BigDecimal.valueOf(100)).build())
+    ;
+    then()
+      .expectEvent(AmountWithdrawnEvent.builder().accountId(ACCOUNT_ID).amount(BigDecimal.valueOf(100)).build())
+    ;
   }
 }

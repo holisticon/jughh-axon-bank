@@ -4,6 +4,92 @@
   "scenarios": [
     {
       "className": "de.holisticon.axon.bank.context.account.aggregate.AccountAggregateTest",
+      "testMethodName": "withdraw_amount",
+      "description": "withdraw amount",
+      "tagIds": [],
+      "explicitParameters": [],
+      "derivedParameters": [],
+      "casesAsTable": false,
+      "scenarioCases": [
+        {
+          "caseNr": 1,
+          "steps": [
+            {
+              "name": "event:",
+              "words": [
+                {
+                  "value": "Given",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "event:"
+                },
+                {
+                  "value": "BankAccountCreatedEvent(accountId\u003df250719c-f04c-4034-8d01-55b680e1fe8f, customerId\u003d0a3c09f4-6033-43ed-9c1f-0a148a5e5f88, initialBalance\u003d0)",
+                  "argumentInfo": {
+                    "argumentName": "event",
+                    "formattedValue": "\"BankAccountCreatedEvent(accountId\u003df250719c-f04c-4034-8d01-55b680e1fe8f, customerId\u003d0a3c09f4-6033-43ed-9c1f-0a148a5e5f88, initialBalance\u003d0)\""
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 375825185
+            },
+            {
+              "name": "command:",
+              "words": [
+                {
+                  "value": "When",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "command:"
+                },
+                {
+                  "value": "WithdrawAmountCommand(accountId\u003df250719c-f04c-4034-8d01-55b680e1fe8f, amount\u003d100)",
+                  "argumentInfo": {
+                    "argumentName": "cmd",
+                    "formattedValue": "\"WithdrawAmountCommand(accountId\u003df250719c-f04c-4034-8d01-55b680e1fe8f, amount\u003d100)\""
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 157465354
+            },
+            {
+              "name": "expect event:",
+              "words": [
+                {
+                  "value": "Then",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "expect event:"
+                },
+                {
+                  "value": "AmountWithdrawnEvent(accountId\u003df250719c-f04c-4034-8d01-55b680e1fe8f, amount\u003d100)",
+                  "argumentInfo": {
+                    "argumentName": "event",
+                    "formattedValue": "\"AmountWithdrawnEvent(accountId\u003df250719c-f04c-4034-8d01-55b680e1fe8f, amount\u003d100)\""
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 2820650
+            }
+          ],
+          "explicitArguments": [],
+          "derivedArguments": [],
+          "status": "SUCCESS",
+          "success": true,
+          "durationInNanos": 635811701
+        }
+      ],
+      "durationInNanos": 635811701,
+      "executionStatus": "SUCCESS"
+    },
+    {
+      "className": "de.holisticon.axon.bank.context.account.aggregate.AccountAggregateTest",
       "testMethodName": "create_account",
       "description": "create account",
       "tagIds": [],
@@ -26,7 +112,7 @@
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 337876590
+              "durationInNanos": 5760451
             },
             {
               "name": "command:",
@@ -39,15 +125,15 @@
                   "value": "command:"
                 },
                 {
-                  "value": "CreateBankAccountCommand(accountId\u003d33f5e633-3b38-4493-a58b-de2a0fcf2380, customerId\u003d6f606b5c-bdda-4614-b431-966f48a742f9, initialBalance\u003d0)",
+                  "value": "CreateBankAccountCommand(accountId\u003df250719c-f04c-4034-8d01-55b680e1fe8f, customerId\u003d0a3c09f4-6033-43ed-9c1f-0a148a5e5f88, initialBalance\u003d0)",
                   "argumentInfo": {
                     "argumentName": "cmd",
-                    "formattedValue": "\"CreateBankAccountCommand(accountId\u003d33f5e633-3b38-4493-a58b-de2a0fcf2380, customerId\u003d6f606b5c-bdda-4614-b431-966f48a742f9, initialBalance\u003d0)\""
+                    "formattedValue": "\"CreateBankAccountCommand(accountId\u003df250719c-f04c-4034-8d01-55b680e1fe8f, customerId\u003d0a3c09f4-6033-43ed-9c1f-0a148a5e5f88, initialBalance\u003d0)\""
                   }
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 323612996
+              "durationInNanos": 41844881
             },
             {
               "name": "expect event:",
@@ -60,25 +146,25 @@
                   "value": "expect event:"
                 },
                 {
-                  "value": "BankAccountCreatedEvent(accountId\u003d33f5e633-3b38-4493-a58b-de2a0fcf2380, customerId\u003d6f606b5c-bdda-4614-b431-966f48a742f9, initialBalance\u003d0)",
+                  "value": "BankAccountCreatedEvent(accountId\u003df250719c-f04c-4034-8d01-55b680e1fe8f, customerId\u003d0a3c09f4-6033-43ed-9c1f-0a148a5e5f88, initialBalance\u003d0)",
                   "argumentInfo": {
                     "argumentName": "event",
-                    "formattedValue": "\"BankAccountCreatedEvent(accountId\u003d33f5e633-3b38-4493-a58b-de2a0fcf2380, customerId\u003d6f606b5c-bdda-4614-b431-966f48a742f9, initialBalance\u003d0)\""
+                    "formattedValue": "\"BankAccountCreatedEvent(accountId\u003df250719c-f04c-4034-8d01-55b680e1fe8f, customerId\u003d0a3c09f4-6033-43ed-9c1f-0a148a5e5f88, initialBalance\u003d0)\""
                   }
                 }
               ],
               "status": "PASSED",
-              "durationInNanos": 5433706
+              "durationInNanos": 2369119
             }
           ],
           "explicitArguments": [],
           "derivedArguments": [],
           "status": "SUCCESS",
           "success": true,
-          "durationInNanos": 857284761
+          "durationInNanos": 69628471
         }
       ],
-      "durationInNanos": 857284761,
+      "durationInNanos": 69628471,
       "executionStatus": "SUCCESS"
     }
   ],
