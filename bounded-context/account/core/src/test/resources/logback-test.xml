@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+  <root level="info" >
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+      <layout class="ch.qos.logback.classic.PatternLayout">
+        <Pattern>%d [%thread] %level %logger - %m%n</Pattern>
+      </layout>
+    </appender>
+  </root>
+
+  <logger name="ch.qos.logback.core" level="error" />
+  <logger name="org.springframework.core.env" level="warn" />
+  <logger name="ch.qos.logback" level="warn" />
+  <logger name="com.tngtech.jgiven" level="info" />
+  <logger name="org.axonframework.messaging.unitofwork" level="WARN"/>
+
+</configuration>
+

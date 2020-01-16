@@ -19,6 +19,10 @@ dependencies {
     api(axonframework("spring-boot-autoconfigure"))
     api(axonframework("spring-boot-starter"))
     api(axonframework("test"))
+
+
+
+    api("io.toolisticon.addons.axon:axon-jgiven:0.1.1")
   }
 
   api(
