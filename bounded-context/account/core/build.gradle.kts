@@ -14,13 +14,16 @@ dependencies {
 
   implementation(springBoot("starter-web"))
 
+
   testImplementation(springBoot("starter-test"))
   testImplementation(axonframework("test"))
 
   testImplementation("ch.qos.logback:logback-classic")
   testImplementation("org.junit.jupiter:junit-jupiter-api")
-  testImplementation("io.toolisticon.addons.axon:axon-jgiven")
+  //testImplementation("io.toolisticon.addons.axon:axon-jgiven")
+  //testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.kotlin}")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+
 
 }
 

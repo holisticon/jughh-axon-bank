@@ -7,18 +7,14 @@ import org.axonframework.modelling.command.TargetAggregateIdentifier;
 import org.axonframework.serialization.Revision;
 
 @Value
-@Builder(toBuilder = true)
 @Revision("1")
-public class CreateBankAccountCommand {
+@Builder(toBuilder = true)
+public class DepositMoneyCommand {
 
   @NonNull
   @TargetAggregateIdentifier
   private String accountId;
 
   @NonNull
-  private String customerId;
-
-  @NonNull
-  @Builder.Default
-  private Integer initialBalance = 0;
+  private Integer amount;
 }

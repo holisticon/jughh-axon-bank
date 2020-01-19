@@ -3,11 +3,17 @@ package de.holisticon.axon.bank.context.account.aggregate;
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
 import de.holisticon.axon.bank.context.account.command.CreateBankAccountCommand;
-import de.holisticon.axon.bank.context.account.command.WithdrawAmountCommand;
-import de.holisticon.axon.bank.context.account.event.AmountWithdrawnEvent;
+import de.holisticon.axon.bank.context.account.command.DepositMoneyCommand;
+import de.holisticon.axon.bank.context.account.command.WithdrawMoneyCommand;
+import de.holisticon.axon.bank.context.account.event.MoneyDepositedEvent;
+import de.holisticon.axon.bank.context.account.event.MoneyWithdrawnEvent;
 import de.holisticon.axon.bank.context.account.event.BankAccountCreatedEvent;
+import de.holisticon.axon.bank.context.account.exception.InsufficientBalanceException;
 import java.math.BigDecimal;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
@@ -16,14 +22,17 @@ import org.axonframework.serialization.Revision;
 import org.axonframework.spring.stereotype.Aggregate;
 
 @Aggregate
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
+@AllArgsConstructor
 @Revision("1")
+@Data
+@Builder
 public class AccountAggregate {
 
   @AggregateIdentifier
   private String accountId;
 
-  private BigDecimal currentBalance;
+  private Integer currentBalance;
 
   @CommandHandler
   public static AccountAggregate handle(CreateBankAccountCommand cmd) {
@@ -43,12 +52,36 @@ public class AccountAggregate {
 
 
   @CommandHandler
-  void handle(WithdrawAmountCommand cmd) {
-    apply(AmountWithdrawnEvent.builder().accountId(accountId).amount(cmd.getAmount()).build());
+  void handle(WithdrawMoneyCommand cmd) {
+    if (currentBalance < cmd.getAmount()) {
+      throw new InsufficientBalanceException(currentBalance, cmd.getAmount());
+    }
+
+    apply(
+      MoneyWithdrawnEvent.builder()
+        .accountId(accountId)
+        .amount(cmd.getAmount())
+        .build()
+    );
   }
 
   @EventSourcingHandler
-  void on(AmountWithdrawnEvent evt) {
-    this.currentBalance = currentBalance.subtract(evt.getAmount());
+  void on(MoneyWithdrawnEvent evt) {
+    this.currentBalance -= evt.getAmount();
+  }
+
+  @CommandHandler
+  void handle(DepositMoneyCommand cmd) {
+    apply(
+      MoneyDepositedEvent.builder()
+        .accountId(accountId)
+        .amount(cmd.getAmount())
+        .build()
+    );
+  }
+
+  @EventSourcingHandler
+  void on(MoneyDepositedEvent evt) {
+    this.currentBalance += evt.getAmount();
   }
 }

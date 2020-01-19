@@ -9,11 +9,11 @@ import org.axonframework.serialization.Revision;
 @Value
 @Builder(toBuilder = true)
 @Revision("1")
-public class AmountWithdrawnEvent {
+public class MoneyWithdrawnEvent {
 
   @NonNull
   private String accountId;
 
   @NonNull
-  private BigDecimal amount;
+  private Integer amount;
 }

@@ -22,7 +22,7 @@ dependencies {
 
 
 
-    api("io.toolisticon.addons.axon:axon-jgiven:0.1.1")
+    api("io.toolisticon.addons.axon:axon-jgiven:4.2.1-0.2-SNAPSHOT")
   }
 
   api(
