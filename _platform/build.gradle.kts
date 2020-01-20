@@ -1,4 +1,5 @@
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
+import Dependencies.axonFramework
 
 plugins {
   `java-platform`
@@ -10,19 +11,17 @@ javaPlatform {
 
 dependencies {
   constraints {
-    api(axonframework("configuration"))
-    api(axonframework("eventsourcing"))
-    api(axonframework("messaging"))
-    api(axonframework("modelling"))
-    api(axonframework("server-connector"))
-    api(axonframework("spring"))
-    api(axonframework("spring-boot-autoconfigure"))
-    api(axonframework("spring-boot-starter"))
-    api(axonframework("test"))
+    api(axonFramework("configuration", Versions.axon))
+    api(axonFramework("eventsourcing",Versions.axon))
+    api(axonFramework("messaging",Versions.axon))
+    api(axonFramework("modelling",Versions.axon))
+    api(axonFramework("server-connector",Versions.axon))
+    api(axonFramework("spring",Versions.axon))
+    api(axonFramework("spring-boot-autoconfigure",Versions.axon))
+    api(axonFramework("spring-boot-starter",Versions.axon))
+    api(axonFramework("test",Versions.axon))
 
-
-
-    api("io.toolisticon.addons.axon:axon-jgiven:4.2.1-0.2-SNAPSHOT")
+    //api("io.toolisticon.addons.axon:axon-jgiven:4.2.1-0.2-SNAPSHOT")
   }
 
   api(

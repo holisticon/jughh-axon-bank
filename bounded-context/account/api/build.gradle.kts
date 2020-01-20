@@ -1,25 +1,17 @@
 import io.freefair.gradle.plugins.lombok.tasks.GenerateLombokConfig
 import Dependencies.axonFramework
 import Dependencies.springBoot
-import Dependencies.contextModule
 
 plugins {
   id("java-library")
-  id("org.springframework.boot")
+  id("io.freefair.lombok")
 }
 
 dependencies {
   implementation(platform(project(":_platform")))
 
-  implementation(contextModule("account","domain"))
-  implementation(contextModule("account","projection"))
-
-  implementation(springBoot("starter-web"))
-  implementation(axonFramework("spring-boot-starter"))
-
-  implementation("io.toolisticon.springboot:springboot-swagger-starter:0.0.4")
+  api(axonFramework("modelling"))
 }
-
 
 tasks {
   withType<JavaCompile> {

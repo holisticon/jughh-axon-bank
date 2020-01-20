@@ -5,21 +5,20 @@ import Dependencies.contextModule
 
 plugins {
   id("java-library")
-  id("org.springframework.boot")
+  id("io.freefair.lombok")
 }
 
 dependencies {
   implementation(platform(project(":_platform")))
 
-  implementation(contextModule("account","domain"))
-  implementation(contextModule("account","projection"))
+  api(contextModule("account", "api"))
+
+  api(axonFramework("eventsourcing"))
+  api(axonFramework("spring"))
 
   implementation(springBoot("starter-web"))
-  implementation(axonFramework("spring-boot-starter"))
 
-  implementation("io.toolisticon.springboot:springboot-swagger-starter:0.0.4")
 }
-
 
 tasks {
   withType<JavaCompile> {
