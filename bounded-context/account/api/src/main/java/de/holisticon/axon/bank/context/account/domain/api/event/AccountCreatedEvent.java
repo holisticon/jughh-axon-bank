@@ -8,7 +8,7 @@ import org.axonframework.serialization.Revision;
 @Value
 @Builder(toBuilder = true)
 @Revision("1")
-public class BankAccountCreatedEvent {
+public class AccountCreatedEvent {
 
   @NonNull
   private String accountId;
@@ -16,6 +16,8 @@ public class BankAccountCreatedEvent {
   @NonNull
   private String customerId;
 
-  @NonNull
-  private Integer initialBalance;
+  private int initialBalance;
+
+  private int maximalBalance;
+
 }

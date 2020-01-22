@@ -1,8 +1,10 @@
 package de.holisticon.axon.bank.context.account.domain.rest;
 
-import de.holisticon.axon.bank.context.account.domain.api.command.CreateBankAccountCommand;
+import de.holisticon.axon.bank.context.account.domain.api.command.CreateAccountCommand;
+import de.holisticon.axon.bank.context.account.domain.api.command.CreateAccountCommand.CreateAccountCommandBuilder;
 import de.holisticon.axon.bank.context.account.domain.api.command.DepositMoneyCommand;
 import de.holisticon.axon.bank.context.account.domain.api.command.WithdrawMoneyCommand;
+import de.holisticon.axon.bank.context.account.domain.api.command.moneytransfer.InitializeMoneyTransferCommand;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -25,15 +27,27 @@ public class AccountDomainController {
   public ResponseEntity<String> createAccount(
     @RequestParam(value = "accountId", required = false) String accountId,
     @RequestParam("customerId") String customerId,
-    @RequestParam(value = "initialBalance", required = false) Integer initialBalance
+    @RequestParam(value = "initialBalance", required = false) Integer initialBalance,
+    @RequestParam(value = "maximalBalance", required = false) Integer maximalBalance
   ) {
-    String createdAccount = commandGateway.sendAndWait(CreateBankAccountCommand.builder()
-      .accountId(Optional.ofNullable(accountId).orElse(UUID.randomUUID().toString()))
-      .customerId(customerId)
-      .initialBalance(Optional.ofNullable(initialBalance).orElse(0))
-      .build());
 
-    return ResponseEntity.ok("{\"accountCreated\":\"" + createdAccount + "\"}");
+    CreateAccountCommandBuilder builder = CreateAccountCommand.builder()
+      .accountId(Optional.ofNullable(accountId).orElse(UUID.randomUUID().toString()))
+      .customerId(customerId);
+
+    if (initialBalance != null) {
+      builder.initialBalance(initialBalance);
+    }
+    if (maximalBalance != null) {
+      builder.maximalBalance(maximalBalance);
+    }
+
+    try {
+      String createdAccount = commandGateway.sendAndWait(builder.build());
+      return ResponseEntity.ok("{\"accountCreated\":\"" + createdAccount + "\"}");
+    } catch (CommandExecutionException e) {
+      return ResponseEntity.badRequest().body("{\"error\":\"" + e.getMessage() + "\"}");
+    }
   }
 
   @PutMapping("/{accountId}/deposit")
@@ -41,12 +55,16 @@ public class AccountDomainController {
     @PathVariable("accountId") String accountId,
     @RequestParam("amount") int amount
   ) {
-    commandGateway.send(DepositMoneyCommand.builder()
-      .accountId(accountId)
-      .amount(amount)
-      .build()
-    );
-    return ResponseEntity.ok("{\"moneyDeposited\":\"" + amount + "\"}");
+    try {
+      commandGateway.send(DepositMoneyCommand.builder()
+        .accountId(accountId)
+        .amount(amount)
+        .build()
+      );
+      return ResponseEntity.ok("{\"moneyDeposited\":\"" + amount + "\"}");
+    } catch (CommandExecutionException e) {
+      return ResponseEntity.badRequest().body("{\"error\":\"" + e.getMessage() + "\"}");
+    }
   }
 
   @PutMapping("/{accountId}/withdraw")
@@ -67,5 +85,26 @@ public class AccountDomainController {
       return ResponseEntity.badRequest().body("{\"error\":\"" + e.getMessage() + "\"}");
     }
   }
+
+  @PostMapping("/moneytransfer")
+  public ResponseEntity<String> initMoneyTransfer(
+    @RequestParam("sourceAccountId") String sourceAccountId,
+    @RequestParam("targetAccountId") String targetAccountId,
+    @RequestParam("amount") int amount
+  ) {
+    String transactionId = UUID.randomUUID().toString();
+    try {
+      commandGateway.sendAndWait(InitializeMoneyTransferCommand.builder()
+        .sourceAccountId(sourceAccountId)
+        .targetAccountId(targetAccountId)
+        .amount(amount)
+        .transactionId(transactionId)
+        .build());
+      return ResponseEntity.ok("{\"moneyTransferInitialized\":\"" + transactionId + "\"}");
+    } catch (CommandExecutionException e) {
+      return ResponseEntity.badRequest().body("{\"error\":\"" + e.getMessage() + "\"}");
+    }
+  }
+
 
 }

@@ -9,7 +9,7 @@ import org.axonframework.serialization.Revision;
 @Value
 @Builder(toBuilder = true)
 @Revision("1")
-public class CreateBankAccountCommand {
+public class CreateAccountCommand {
 
   @NonNull
   @TargetAggregateIdentifier
@@ -18,7 +18,9 @@ public class CreateBankAccountCommand {
   @NonNull
   private String customerId;
 
-  @NonNull
-  @Builder.Default
-  private Integer initialBalance = 0;
+
+  private Integer initialBalance;
+
+  private Integer maximalBalance;
+
 }
