@@ -1,21 +1,24 @@
 package de.holisticon.axon.bank.context.account.projection.rest;
 
-import static org.axonframework.messaging.responsetypes.ResponseTypes.multipleInstancesOf;
-import static org.axonframework.messaging.responsetypes.ResponseTypes.optionalInstanceOf;
-
 import de.holisticon.axon.bank.context.account.api.query.AccountCurrentBalanceDto;
 import de.holisticon.axon.bank.context.account.api.query.AccountFindAllQuery;
 import de.holisticon.axon.bank.context.account.api.query.AccountFindByIdQuery;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.axonframework.queryhandling.QueryGateway;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
+import static org.axonframework.messaging.responsetypes.ResponseTypes.multipleInstancesOf;
+import static org.axonframework.messaging.responsetypes.ResponseTypes.optionalInstanceOf;
+
 @RequestMapping("/account/projection")
 @RequiredArgsConstructor
+@CrossOrigin
 public class AccountProjectionController {
 
   private final QueryGateway queryGateway;
@@ -28,7 +31,7 @@ public class AccountProjectionController {
       queryGateway.query(
         AccountFindByIdQuery.of(accountId),
         optionalInstanceOf(AccountCurrentBalanceDto.class))
-        .join()
+                  .join()
     );
   }
 
@@ -38,7 +41,7 @@ public class AccountProjectionController {
       queryGateway.query(
         AccountFindAllQuery.of(),
         multipleInstancesOf(AccountCurrentBalanceDto.class))
-        .join()
+                  .join()
     );
   }
 

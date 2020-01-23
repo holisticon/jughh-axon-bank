@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.axonframework.commandhandling.CommandExecutionException;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RequestMapping("/account/domain")
 @RequiredArgsConstructor
+@CrossOrigin
 public class AccountDomainController {
 
   private final CommandGateway commandGateway;

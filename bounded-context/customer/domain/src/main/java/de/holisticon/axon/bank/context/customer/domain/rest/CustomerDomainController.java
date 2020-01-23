@@ -7,12 +7,14 @@ import lombok.RequiredArgsConstructor;
 import org.axonframework.commandhandling.CommandExecutionException;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RequestMapping("/customer/domain")
 @RequiredArgsConstructor
+@CrossOrigin
 public class CustomerDomainController {
 
   private final CommandGateway commandGateway;

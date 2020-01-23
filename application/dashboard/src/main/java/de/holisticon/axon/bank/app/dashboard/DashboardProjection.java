@@ -3,16 +3,18 @@ package de.holisticon.axon.bank.app.dashboard;
 import de.holisticon.axon.bank.context.account.api.domainevent.BalanceChangedEvent;
 import de.holisticon.axon.bank.context.account.api.event.AccountCreatedEvent;
 import de.holisticon.axon.bank.context.customer.api.event.CustomerRegisteredEvent;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.eventhandling.EventHandler;
 import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 @Slf4j
@@ -22,6 +24,10 @@ public class DashboardProjection {
 
   public Optional<CustomerAccountDashboardDto> findByCustomerId(String customerId) {
     return Optional.ofNullable(store.get(customerId));
+  }
+
+  public Set<String> findAll() {
+    return store.keySet();
   }
 
   @EventHandler
