@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collection;
 import java.util.Set;
 
 @SpringBootApplication
@@ -32,13 +33,18 @@ public class AxonBankDashboardApplication {
   @Autowired
   private DashboardProjection dashboardProjection;
 
-  @GetMapping("/{customerId}")
+  @GetMapping("/customer/{customerId}")
   public ResponseEntity<CustomerAccountDashboardDto> findByCustomerId(@PathVariable("customerId") String customerId) {
     return ResponseEntity.of(dashboardProjection.findByCustomerId(customerId));
   }
 
-  @GetMapping("/")
-  public ResponseEntity<Set<String>> findAll() {
+  @GetMapping("/customer-id")
+  public ResponseEntity<Set<String>> findAllIds() {
+    return ResponseEntity.ok(dashboardProjection.findAllIds());
+  }
+
+  @GetMapping("/customer")
+  public ResponseEntity<Collection<CustomerAccountDashboardDto>> findAll() {
     return ResponseEntity.ok(dashboardProjection.findAll());
   }
 

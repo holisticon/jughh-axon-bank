@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.axonframework.eventhandling.EventHandler;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -26,8 +27,12 @@ public class DashboardProjection {
     return Optional.ofNullable(store.get(customerId));
   }
 
-  public Set<String> findAll() {
+  public Set<String> findAllIds() {
     return store.keySet();
+  }
+
+  public Collection<CustomerAccountDashboardDto> findAll() {
+    return store.values();
   }
 
   @EventHandler
