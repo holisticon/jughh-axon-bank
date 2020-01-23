@@ -2,6 +2,7 @@ package de.holisticon.axon.bank.app;
 
 import de.holisticon.axon.bank.app.dashboard.DashboardProjection;
 import de.holisticon.axon.bank.app.dashboard.DashboardProjection.CustomerAccountDashboardDto;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.eventhandling.tokenstore.TokenStore;
 import org.axonframework.eventhandling.tokenstore.inmemory.InMemoryTokenStore;
@@ -15,8 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Set;
 
 @SpringBootApplication
 @RestController

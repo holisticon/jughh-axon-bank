@@ -5,7 +5,6 @@ import de.holisticon.axon.bank.context.account.projection.AccountProjectionConfi
 import de.holisticon.axon.bank.context.customer.domain.CustomerDomainConfiguration;
 import org.axonframework.eventhandling.tokenstore.TokenStore;
 import org.axonframework.eventhandling.tokenstore.inmemory.InMemoryTokenStore;
-import org.axonframework.eventsourcing.eventstore.EventStore;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
