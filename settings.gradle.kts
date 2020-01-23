@@ -3,6 +3,7 @@ rootProject.name = "jughh-axon-bank"
 include("_platform")
 
 include("application:all-in-one")
+include("application:dashboard")
 
 /**
  * We must ensure that two modules in two contexts (eg. "projection" in "forderungsdaten" and "verpflichtungsdetails"
@@ -17,6 +18,14 @@ fun includeBoundedContext(context: String, modules: List<String>) = modules.forE
 
 includeBoundedContext(
   "account",
+  listOf(
+    "api",
+    "domain",
+    "projection"
+  )
+)
+includeBoundedContext(
+  "customer",
   listOf(
     "api",
     "domain",

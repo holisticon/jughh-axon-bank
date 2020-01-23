@@ -6,7 +6,7 @@ import static de.holisticon.axon.bank.context.account.domain.AccountAggregateTes
 import static de.holisticon.axon.bank.context.account.domain.AccountAggregateTestHelper.CUSTOMER_ID_2;
 import static de.holisticon.axon.bank.context.account.domain.AccountAggregateTestHelper.accountCreatedEvent;
 
-import de.holisticon.axon.bank.context.account.domain.api.event.moneytransfer.MoneyTransferInitializedEvent;
+import de.holisticon.axon.bank.context.account.api.event.moneytransfer.MoneyTransferInitializedEvent;
 import org.axonframework.test.saga.SagaTestFixture;
 import org.junit.jupiter.api.Test;
 

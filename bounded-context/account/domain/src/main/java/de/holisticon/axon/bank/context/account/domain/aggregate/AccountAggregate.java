@@ -3,21 +3,22 @@ package de.holisticon.axon.bank.context.account.domain.aggregate;
 import static java.util.Optional.ofNullable;
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
-import de.holisticon.axon.bank.context.account.domain.api.command.CreateAccountCommand;
-import de.holisticon.axon.bank.context.account.domain.api.command.DepositMoneyCommand;
-import de.holisticon.axon.bank.context.account.domain.api.command.WithdrawMoneyCommand;
-import de.holisticon.axon.bank.context.account.domain.api.command.moneytransfer.CompleteMoneyTransferCommand;
-import de.holisticon.axon.bank.context.account.domain.api.command.moneytransfer.InitializeMoneyTransferCommand;
-import de.holisticon.axon.bank.context.account.domain.api.command.moneytransfer.ReceiveMoneyTransferCommand;
-import de.holisticon.axon.bank.context.account.domain.api.event.AccountCreatedEvent;
-import de.holisticon.axon.bank.context.account.domain.api.event.MoneyDepositedEvent;
-import de.holisticon.axon.bank.context.account.domain.api.event.MoneyWithdrawnEvent;
-import de.holisticon.axon.bank.context.account.domain.api.event.moneytransfer.MoneyTransferCompletedEvent;
-import de.holisticon.axon.bank.context.account.domain.api.event.moneytransfer.MoneyTransferInitializedEvent;
-import de.holisticon.axon.bank.context.account.domain.api.event.moneytransfer.MoneyTransferReceivedEvent;
-import de.holisticon.axon.bank.context.account.domain.api.exception.InsufficientBalanceException;
-import de.holisticon.axon.bank.context.account.domain.api.exception.MaximalBalanceExceededException;
-import de.holisticon.axon.bank.context.account.domain.api.exception.MaximumActiveMoneyTransfersReachedException;
+import de.holisticon.axon.bank.context.account.api.command.CreateAccountCommand;
+import de.holisticon.axon.bank.context.account.api.command.DepositMoneyCommand;
+import de.holisticon.axon.bank.context.account.api.command.WithdrawMoneyCommand;
+import de.holisticon.axon.bank.context.account.api.command.moneytransfer.CompleteMoneyTransferCommand;
+import de.holisticon.axon.bank.context.account.api.command.moneytransfer.InitializeMoneyTransferCommand;
+import de.holisticon.axon.bank.context.account.api.command.moneytransfer.ReceiveMoneyTransferCommand;
+import de.holisticon.axon.bank.context.account.api.domainevent.BalanceChangedEvent;
+import de.holisticon.axon.bank.context.account.api.event.AccountCreatedEvent;
+import de.holisticon.axon.bank.context.account.api.event.MoneyDepositedEvent;
+import de.holisticon.axon.bank.context.account.api.event.MoneyWithdrawnEvent;
+import de.holisticon.axon.bank.context.account.api.event.moneytransfer.MoneyTransferCompletedEvent;
+import de.holisticon.axon.bank.context.account.api.event.moneytransfer.MoneyTransferInitializedEvent;
+import de.holisticon.axon.bank.context.account.api.event.moneytransfer.MoneyTransferReceivedEvent;
+import de.holisticon.axon.bank.context.account.api.exception.InsufficientBalanceException;
+import de.holisticon.axon.bank.context.account.api.exception.MaximalBalanceExceededException;
+import de.holisticon.axon.bank.context.account.api.exception.MaximumActiveMoneyTransfersReachedException;
 import java.util.Collections;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,9 +28,11 @@ import lombok.NonNull;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.commandhandling.CommandHandler;
+import org.axonframework.eventhandling.gateway.EventGateway;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.spring.stereotype.Aggregate;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Aggregate
 @NoArgsConstructor
@@ -93,7 +96,7 @@ public class AccountAggregate {
   @EventSourcingHandler
   void on(MoneyWithdrawnEvent evt) {
     log.info("replaying event: {}", evt);
-    this.currentBalance -= evt.getAmount();
+    decreaseCurrentBalance(evt.getAmount());
   }
 
   @CommandHandler
@@ -185,10 +188,14 @@ public class AccountAggregate {
 
   private void increaseCurrentBalance(int amount) {
     this.currentBalance += amount;
+    apply(BalanceChangedEvent.builder()
+      .accountId(accountId)
+      .newBalance(this.currentBalance)
+      .build());
   }
 
   private void decreaseCurrentBalance(int amount) {
-    this.currentBalance -= amount;
+    increaseCurrentBalance(-amount);
   }
 
   private void checkForMaximalBalanceExceeded(int amount) {

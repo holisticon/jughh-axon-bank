@@ -3,9 +3,9 @@ package de.holisticon.axon.bank.context.account.projection.rest;
 import static org.axonframework.messaging.responsetypes.ResponseTypes.multipleInstancesOf;
 import static org.axonframework.messaging.responsetypes.ResponseTypes.optionalInstanceOf;
 
-import de.holisticon.axon.bank.context.account.domain.api.query.AccountCurrentBalanceDto;
-import de.holisticon.axon.bank.context.account.domain.api.query.AccountFindAllQuery;
-import de.holisticon.axon.bank.context.account.domain.api.query.AccountFindByIdQuery;
+import de.holisticon.axon.bank.context.account.api.query.AccountCurrentBalanceDto;
+import de.holisticon.axon.bank.context.account.api.query.AccountFindAllQuery;
+import de.holisticon.axon.bank.context.account.api.query.AccountFindByIdQuery;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.axonframework.queryhandling.QueryGateway;

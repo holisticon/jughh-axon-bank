@@ -1,13 +1,13 @@
 package de.holisticon.axon.bank.context.account.projection.balance;
 
-import de.holisticon.axon.bank.context.account.domain.api.event.AccountCreatedEvent;
-import de.holisticon.axon.bank.context.account.domain.api.event.MoneyDepositedEvent;
-import de.holisticon.axon.bank.context.account.domain.api.event.MoneyWithdrawnEvent;
-import de.holisticon.axon.bank.context.account.domain.api.event.moneytransfer.MoneyTransferCompletedEvent;
-import de.holisticon.axon.bank.context.account.domain.api.event.moneytransfer.MoneyTransferReceivedEvent;
-import de.holisticon.axon.bank.context.account.domain.api.query.AccountCurrentBalanceDto;
-import de.holisticon.axon.bank.context.account.domain.api.query.AccountFindAllQuery;
-import de.holisticon.axon.bank.context.account.domain.api.query.AccountFindByIdQuery;
+import de.holisticon.axon.bank.context.account.api.event.AccountCreatedEvent;
+import de.holisticon.axon.bank.context.account.api.event.MoneyDepositedEvent;
+import de.holisticon.axon.bank.context.account.api.event.MoneyWithdrawnEvent;
+import de.holisticon.axon.bank.context.account.api.event.moneytransfer.MoneyTransferCompletedEvent;
+import de.holisticon.axon.bank.context.account.api.event.moneytransfer.MoneyTransferReceivedEvent;
+import de.holisticon.axon.bank.context.account.api.query.AccountCurrentBalanceDto;
+import de.holisticon.axon.bank.context.account.api.query.AccountFindAllQuery;
+import de.holisticon.axon.bank.context.account.api.query.AccountFindByIdQuery;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

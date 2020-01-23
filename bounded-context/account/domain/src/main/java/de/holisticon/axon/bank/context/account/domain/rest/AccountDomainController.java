@@ -1,10 +1,10 @@
 package de.holisticon.axon.bank.context.account.domain.rest;
 
-import de.holisticon.axon.bank.context.account.domain.api.command.CreateAccountCommand;
-import de.holisticon.axon.bank.context.account.domain.api.command.CreateAccountCommand.CreateAccountCommandBuilder;
-import de.holisticon.axon.bank.context.account.domain.api.command.DepositMoneyCommand;
-import de.holisticon.axon.bank.context.account.domain.api.command.WithdrawMoneyCommand;
-import de.holisticon.axon.bank.context.account.domain.api.command.moneytransfer.InitializeMoneyTransferCommand;
+import de.holisticon.axon.bank.context.account.api.command.CreateAccountCommand;
+import de.holisticon.axon.bank.context.account.api.command.CreateAccountCommand.CreateAccountCommandBuilder;
+import de.holisticon.axon.bank.context.account.api.command.DepositMoneyCommand;
+import de.holisticon.axon.bank.context.account.api.command.WithdrawMoneyCommand;
+import de.holisticon.axon.bank.context.account.api.command.moneytransfer.InitializeMoneyTransferCommand;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;

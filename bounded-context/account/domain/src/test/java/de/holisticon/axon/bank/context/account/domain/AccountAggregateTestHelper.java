@@ -4,8 +4,8 @@ import static de.holisticon.axon.bank.context.account.domain.aggregate.AccountAg
 import static de.holisticon.axon.bank.context.account.domain.aggregate.AccountAggregate.Configuration.DEFAULT_MAXIMAL_BALANCE;
 
 import de.holisticon.axon.bank.context.account.domain.aggregate.AccountAggregate;
-import de.holisticon.axon.bank.context.account.domain.api.command.CreateAccountCommand;
-import de.holisticon.axon.bank.context.account.domain.api.event.AccountCreatedEvent;
+import de.holisticon.axon.bank.context.account.api.command.CreateAccountCommand;
+import de.holisticon.axon.bank.context.account.api.event.AccountCreatedEvent;
 import java.util.UUID;
 
 public enum AccountAggregateTestHelper {

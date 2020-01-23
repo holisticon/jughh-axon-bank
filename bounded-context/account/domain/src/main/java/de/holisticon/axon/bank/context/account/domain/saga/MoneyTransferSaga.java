@@ -1,10 +1,10 @@
 package de.holisticon.axon.bank.context.account.domain.saga;
 
-import de.holisticon.axon.bank.context.account.domain.api.command.moneytransfer.CompleteMoneyTransferCommand;
-import de.holisticon.axon.bank.context.account.domain.api.command.moneytransfer.ReceiveMoneyTransferCommand;
-import de.holisticon.axon.bank.context.account.domain.api.event.moneytransfer.MoneyTransferCompletedEvent;
-import de.holisticon.axon.bank.context.account.domain.api.event.moneytransfer.MoneyTransferInitializedEvent;
-import de.holisticon.axon.bank.context.account.domain.api.event.moneytransfer.MoneyTransferReceivedEvent;
+import de.holisticon.axon.bank.context.account.api.command.moneytransfer.CompleteMoneyTransferCommand;
+import de.holisticon.axon.bank.context.account.api.command.moneytransfer.ReceiveMoneyTransferCommand;
+import de.holisticon.axon.bank.context.account.api.event.moneytransfer.MoneyTransferCompletedEvent;
+import de.holisticon.axon.bank.context.account.api.event.moneytransfer.MoneyTransferInitializedEvent;
+import de.holisticon.axon.bank.context.account.api.event.moneytransfer.MoneyTransferReceivedEvent;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.commandhandling.gateway.CommandGateway;

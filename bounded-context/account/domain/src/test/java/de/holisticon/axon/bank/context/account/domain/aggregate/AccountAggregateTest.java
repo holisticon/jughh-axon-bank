@@ -9,19 +9,22 @@ import static de.holisticon.axon.bank.context.account.domain.AccountAggregateTes
 import static de.holisticon.axon.bank.context.account.domain.aggregate.AccountAggregate.Configuration.DEFAULT_INITIAL_BALANCE;
 import static de.holisticon.axon.bank.context.account.domain.aggregate.AccountAggregate.Configuration.DEFAULT_MAXIMAL_BALANCE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
+import de.holisticon.axon.bank.context.account.api.domainevent.BalanceChangedEvent;
 import de.holisticon.axon.bank.context.account.domain.aggregate.AccountAggregate.ActiveMoneyTransfer;
-import de.holisticon.axon.bank.context.account.domain.api.command.DepositMoneyCommand;
-import de.holisticon.axon.bank.context.account.domain.api.command.WithdrawMoneyCommand;
-import de.holisticon.axon.bank.context.account.domain.api.command.moneytransfer.InitializeMoneyTransferCommand;
-import de.holisticon.axon.bank.context.account.domain.api.event.MoneyDepositedEvent;
-import de.holisticon.axon.bank.context.account.domain.api.event.MoneyWithdrawnEvent;
-import de.holisticon.axon.bank.context.account.domain.api.event.moneytransfer.MoneyTransferInitializedEvent;
-import de.holisticon.axon.bank.context.account.domain.api.exception.InsufficientBalanceException;
-import de.holisticon.axon.bank.context.account.domain.api.exception.MaximalBalanceExceededException;
-import de.holisticon.axon.bank.context.account.domain.api.exception.MaximumActiveMoneyTransfersReachedException;
+import de.holisticon.axon.bank.context.account.api.command.DepositMoneyCommand;
+import de.holisticon.axon.bank.context.account.api.command.WithdrawMoneyCommand;
+import de.holisticon.axon.bank.context.account.api.command.moneytransfer.InitializeMoneyTransferCommand;
+import de.holisticon.axon.bank.context.account.api.event.MoneyDepositedEvent;
+import de.holisticon.axon.bank.context.account.api.event.MoneyWithdrawnEvent;
+import de.holisticon.axon.bank.context.account.api.event.moneytransfer.MoneyTransferInitializedEvent;
+import de.holisticon.axon.bank.context.account.api.exception.InsufficientBalanceException;
+import de.holisticon.axon.bank.context.account.api.exception.MaximalBalanceExceededException;
+import de.holisticon.axon.bank.context.account.api.exception.MaximumActiveMoneyTransfersReachedException;
 import java.util.UUID;
 import java.util.function.Consumer;
+import org.axonframework.eventhandling.gateway.EventGateway;
 import org.axonframework.test.aggregate.AggregateTestFixture;
 import org.junit.jupiter.api.Test;
 
@@ -60,7 +63,8 @@ class AccountAggregateTest {
         WithdrawMoneyCommand.builder().accountId(ACCOUNT_ID_1).amount(50).build()
       )
       .expectEvents(
-        MoneyWithdrawnEvent.builder().accountId(ACCOUNT_ID_1).amount(50).build()
+        MoneyWithdrawnEvent.builder().accountId(ACCOUNT_ID_1).amount(50).build(),
+        BalanceChangedEvent.builder().accountId(ACCOUNT_ID_1).newBalance(150).build()
       )
       .expectState(
         is(accountAggregate(ACCOUNT_ID_1, 150, DEFAULT_MAXIMAL_BALANCE))
@@ -98,7 +102,10 @@ class AccountAggregateTest {
       .when(
         DepositMoneyCommand.builder().accountId(ACCOUNT_ID_1).amount(100).build()
       )
-      .expectEvents(MoneyDepositedEvent.builder().accountId(ACCOUNT_ID_1).amount(100).build())
+      .expectEvents(
+        MoneyDepositedEvent.builder().accountId(ACCOUNT_ID_1).amount(100).build(),
+        BalanceChangedEvent.builder().accountId(ACCOUNT_ID_1).newBalance(100).build()
+      )
       .expectState(is(
         accountAggregate(ACCOUNT_ID_1, 100, DEFAULT_MAXIMAL_BALANCE)
       ))
