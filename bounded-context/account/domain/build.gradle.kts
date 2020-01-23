@@ -11,23 +11,20 @@ plugins {
 dependencies {
   implementation(platform(project(":_platform")))
 
+  // BANK
   api(contextModule("account", "api"))
 
+  // SPRINGBOOT/AXON
   api(axonFramework("eventsourcing"))
   api(axonFramework("spring"))
-
   implementation(springBoot("starter-web"))
 
+  // TEST
   testImplementation(springBoot("starter-test"))
   testImplementation(axonFramework("test"))
-
   testImplementation("ch.qos.logback:logback-classic")
   testImplementation("org.junit.jupiter:junit-jupiter-api")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
-
-
-  //testImplementation("io.toolisticon.addons.axon:axon-jgiven")
-  //testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.kotlin}")
 }
 
 tasks {

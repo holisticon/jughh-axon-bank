@@ -9,6 +9,7 @@ import de.holisticon.axon.bank.context.account.api.command.WithdrawMoneyCommand;
 import de.holisticon.axon.bank.context.account.api.command.moneytransfer.CompleteMoneyTransferCommand;
 import de.holisticon.axon.bank.context.account.api.command.moneytransfer.InitializeMoneyTransferCommand;
 import de.holisticon.axon.bank.context.account.api.command.moneytransfer.ReceiveMoneyTransferCommand;
+import de.holisticon.axon.bank.context.account.api.command.moneytransfer.RollBackMoneyTransferCommand;
 import de.holisticon.axon.bank.context.account.api.domainevent.BalanceChangedEvent;
 import de.holisticon.axon.bank.context.account.api.event.AccountCreatedEvent;
 import de.holisticon.axon.bank.context.account.api.event.MoneyDepositedEvent;
@@ -16,6 +17,7 @@ import de.holisticon.axon.bank.context.account.api.event.MoneyWithdrawnEvent;
 import de.holisticon.axon.bank.context.account.api.event.moneytransfer.MoneyTransferCompletedEvent;
 import de.holisticon.axon.bank.context.account.api.event.moneytransfer.MoneyTransferInitializedEvent;
 import de.holisticon.axon.bank.context.account.api.event.moneytransfer.MoneyTransferReceivedEvent;
+import de.holisticon.axon.bank.context.account.api.event.moneytransfer.MoneyTransferRolledBackEvent;
 import de.holisticon.axon.bank.context.account.api.exception.InsufficientBalanceException;
 import de.holisticon.axon.bank.context.account.api.exception.MaximalBalanceExceededException;
 import de.holisticon.axon.bank.context.account.api.exception.MaximumActiveMoneyTransfersReachedException;
@@ -177,7 +179,29 @@ public class AccountAggregate {
   @EventSourcingHandler
   void on(MoneyTransferCompletedEvent evt) {
     decreaseCurrentBalance(evt.getAmount());
+    activeMoneyTransfer = null;
   }
+
+
+  @CommandHandler
+  void handle(RollBackMoneyTransferCommand cmd) {
+    if (activeMoneyTransfer == null || !activeMoneyTransfer.transactionId.equals(cmd.getTransactionId())) {
+      throw new IllegalStateException("not participating in transaction: " + cmd.getTransactionId());
+    }
+
+    apply(MoneyTransferRolledBackEvent.builder()
+      .sourceAccountId(cmd.getSourceAccountId())
+      .transactionId(cmd.getTransactionId())
+      .build()
+    );
+  }
+
+
+  @EventSourcingHandler
+  void on(MoneyTransferRolledBackEvent evt) {
+    activeMoneyTransfer = null;
+  }
+
 
   /**
    * @return stored current balance minus amount(s) reserved by active money transfers

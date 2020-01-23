@@ -2,11 +2,14 @@ package de.holisticon.axon.bank.context.account.domain.saga;
 
 import de.holisticon.axon.bank.context.account.api.command.moneytransfer.CompleteMoneyTransferCommand;
 import de.holisticon.axon.bank.context.account.api.command.moneytransfer.ReceiveMoneyTransferCommand;
+import de.holisticon.axon.bank.context.account.api.command.moneytransfer.RollBackMoneyTransferCommand;
 import de.holisticon.axon.bank.context.account.api.event.moneytransfer.MoneyTransferCompletedEvent;
 import de.holisticon.axon.bank.context.account.api.event.moneytransfer.MoneyTransferInitializedEvent;
 import de.holisticon.axon.bank.context.account.api.event.moneytransfer.MoneyTransferReceivedEvent;
+import de.holisticon.axon.bank.context.account.api.event.moneytransfer.MoneyTransferRolledBackEvent;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.axonframework.commandhandling.CommandExecutionException;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.modelling.saga.EndSaga;
 import org.axonframework.modelling.saga.SagaEventHandler;
@@ -34,24 +37,31 @@ public class MoneyTransferSaga {
   @StartSaga
   @SagaEventHandler(associationProperty = TRANSACTION_ID)
   void on(MoneyTransferInitializedEvent evt) {
-    log.info("init moneyTransfer: {}", evt);
+    log.info("Saga started: {}", evt);
 
     sourceAccountId = evt.getSourceAccountId();
     targetAccountId = evt.getTargetAccountId();
     amount = evt.getAmount();
 
-    commandGateway.sendAndWait(ReceiveMoneyTransferCommand.builder()
-      .amount(evt.getAmount())
-      .sourceAccountId(sourceAccountId)
-      .targetAccountId(targetAccountId)
-      .transactionId(evt.getTransactionId())
-      .build()
+    try {
+      commandGateway.sendAndWait(ReceiveMoneyTransferCommand.builder()
+        .amount(evt.getAmount())
+        .sourceAccountId(sourceAccountId)
+        .targetAccountId(targetAccountId)
+        .transactionId(evt.getTransactionId())
+        .build()
     );
+    } catch (CommandExecutionException e) {
+      commandGateway.sendAndWait(RollBackMoneyTransferCommand.builder()
+        .sourceAccountId(sourceAccountId)
+        .transactionId(evt.getTransactionId())
+        .build());
+    }
   }
 
   @SagaEventHandler(associationProperty = TRANSACTION_ID)
   void on(MoneyTransferReceivedEvent evt) {
-    log.info("moneyTransferReceived: {}", evt);
+    log.info("Saga: {}", evt);
 
     commandGateway.sendAndWait(CompleteMoneyTransferCommand.builder()
       .amount(amount)
@@ -64,6 +74,12 @@ public class MoneyTransferSaga {
   @EndSaga
   @SagaEventHandler(associationProperty = TRANSACTION_ID)
   void on(MoneyTransferCompletedEvent evt) {
-    log.info("moneyTransferCompleted: {}", evt);
+    log.info("Saga: {}", evt);
+  }
+
+  @EndSaga
+  @SagaEventHandler(associationProperty = TRANSACTION_ID)
+  void on(MoneyTransferRolledBackEvent evt) {
+    log.error("Saga: {}", evt);
   }
 }

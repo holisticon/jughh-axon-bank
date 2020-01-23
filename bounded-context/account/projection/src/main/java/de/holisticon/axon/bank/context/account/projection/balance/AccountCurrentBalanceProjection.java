@@ -5,6 +5,7 @@ import de.holisticon.axon.bank.context.account.api.event.MoneyDepositedEvent;
 import de.holisticon.axon.bank.context.account.api.event.MoneyWithdrawnEvent;
 import de.holisticon.axon.bank.context.account.api.event.moneytransfer.MoneyTransferCompletedEvent;
 import de.holisticon.axon.bank.context.account.api.event.moneytransfer.MoneyTransferReceivedEvent;
+import de.holisticon.axon.bank.context.account.api.query.AccountFindByCustomerIdQuery;
 import de.holisticon.axon.bank.context.account.api.query.AccountCurrentBalanceDto;
 import de.holisticon.axon.bank.context.account.api.query.AccountFindAllQuery;
 import de.holisticon.axon.bank.context.account.api.query.AccountFindByIdQuery;
@@ -13,11 +14,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import lombok.RequiredArgsConstructor;
+import java.util.stream.Collectors;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.queryhandling.QueryHandler;
 
-@RequiredArgsConstructor
 public class AccountCurrentBalanceProjection {
 
   private final Map<String, AccountCurrentBalanceDto> store = new ConcurrentHashMap<>();
@@ -27,6 +27,7 @@ public class AccountCurrentBalanceProjection {
     store.put(evt.getAccountId(), AccountCurrentBalanceDto.builder()
       .accountId(evt.getAccountId())
       .currentBalance(evt.getInitialBalance())
+      .customerId(evt.getCustomerId())
       .build());
   }
 
@@ -64,5 +65,10 @@ public class AccountCurrentBalanceProjection {
   @QueryHandler
   public List<AccountCurrentBalanceDto> query(AccountFindAllQuery query) {
     return new ArrayList<>(store.values());
+  }
+
+  @QueryHandler
+  public List<AccountCurrentBalanceDto> query(AccountFindByCustomerIdQuery query) {
+    return store.values().stream().filter(it -> query.getCustomerId().equals(it.getCustomerId())).collect(Collectors.toList());
   }
 }

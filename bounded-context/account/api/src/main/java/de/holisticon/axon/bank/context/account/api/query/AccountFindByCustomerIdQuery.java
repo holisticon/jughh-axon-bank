@@ -3,14 +3,8 @@ package de.holisticon.axon.bank.context.account.api.query;
 import lombok.Builder;
 import lombok.Value;
 
-@Value
-@Builder(toBuilder = true)
-public class AccountCurrentBalanceDto {
-
-  private String accountId;
+@Value(staticConstructor = "of")
+public class AccountFindByCustomerIdQuery {
 
   private String customerId;
-
-  private int currentBalance;
-
 }

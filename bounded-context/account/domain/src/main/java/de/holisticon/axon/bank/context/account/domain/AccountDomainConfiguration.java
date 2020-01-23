@@ -11,6 +11,4 @@ import org.springframework.context.annotation.Import;
   MoneyTransferSaga.class
 })
 public class AccountDomainConfiguration {
-
-
 }
