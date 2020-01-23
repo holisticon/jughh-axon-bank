@@ -14,8 +14,8 @@ dependencies {
   implementation(contextModule("account","domain"))
   implementation(contextModule("account","projection"))
 
-  implementation(contextModule("customer","domain"))
-  implementation(contextModule("customer","projection"))
+//  implementation(contextModule("customer","domain"))
+//  implementation(contextModule("customer","projection"))
 
   implementation(springBoot("starter-web"))
   implementation(axonFramework("spring-boot-starter"))

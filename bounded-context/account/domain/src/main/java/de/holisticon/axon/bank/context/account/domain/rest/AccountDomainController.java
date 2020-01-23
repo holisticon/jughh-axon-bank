@@ -4,7 +4,6 @@ import de.holisticon.axon.bank.context.account.api.command.CreateAccountCommand;
 import de.holisticon.axon.bank.context.account.api.command.CreateAccountCommand.CreateAccountCommandBuilder;
 import de.holisticon.axon.bank.context.account.api.command.DepositMoneyCommand;
 import de.holisticon.axon.bank.context.account.api.command.WithdrawMoneyCommand;
-import de.holisticon.axon.bank.context.account.api.command.moneytransfer.InitializeMoneyTransferCommand;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -87,26 +86,26 @@ public class AccountDomainController {
       return ResponseEntity.badRequest().body("{\"error\":\"" + e.getMessage() + "\"}");
     }
   }
-
-  @PostMapping("/moneytransfer")
-  public ResponseEntity<String> initMoneyTransfer(
-    @RequestParam("sourceAccountId") String sourceAccountId,
-    @RequestParam("targetAccountId") String targetAccountId,
-    @RequestParam("amount") int amount
-  ) {
-    String transactionId = UUID.randomUUID().toString();
-    try {
-      commandGateway.sendAndWait(InitializeMoneyTransferCommand.builder()
-        .sourceAccountId(sourceAccountId)
-        .targetAccountId(targetAccountId)
-        .amount(amount)
-        .transactionId(transactionId)
-        .build());
-      return ResponseEntity.ok("{\"moneyTransferInitialized\":\"" + transactionId + "\"}");
-    } catch (CommandExecutionException e) {
-      return ResponseEntity.badRequest().body("{\"error\":\"" + e.getMessage() + "\"}");
-    }
-  }
+//
+//  @PostMapping("/moneytransfer")
+//  public ResponseEntity<String> initMoneyTransfer(
+//    @RequestParam("sourceAccountId") String sourceAccountId,
+//    @RequestParam("targetAccountId") String targetAccountId,
+//    @RequestParam("amount") int amount
+//  ) {
+//    String transactionId = UUID.randomUUID().toString();
+//    try {
+//      commandGateway.sendAndWait(InitializeMoneyTransferCommand.builder()
+//        .sourceAccountId(sourceAccountId)
+//        .targetAccountId(targetAccountId)
+//        .amount(amount)
+//        .transactionId(transactionId)
+//        .build());
+//      return ResponseEntity.ok("{\"moneyTransferInitialized\":\"" + transactionId + "\"}");
+//    } catch (CommandExecutionException e) {
+//      return ResponseEntity.badRequest().body("{\"error\":\"" + e.getMessage() + "\"}");
+//    }
+//  }
 
 
 }

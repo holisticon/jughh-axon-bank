@@ -3,7 +3,6 @@ package de.holisticon.axon.bank.context.account.domain;
 import static de.holisticon.axon.bank.context.account.domain.aggregate.AccountAggregate.Configuration.DEFAULT_INITIAL_BALANCE;
 import static de.holisticon.axon.bank.context.account.domain.aggregate.AccountAggregate.Configuration.DEFAULT_MAXIMAL_BALANCE;
 
-import de.holisticon.axon.bank.context.account.domain.aggregate.AccountAggregate;
 import de.holisticon.axon.bank.context.account.api.command.CreateAccountCommand;
 import de.holisticon.axon.bank.context.account.api.event.AccountCreatedEvent;
 import java.util.UUID;
@@ -33,11 +32,4 @@ public enum AccountAggregateTestHelper {
       .build();
   }
 
-  public static AccountAggregate accountAggregate(String accountId, int currentBalance, int maximalBalance) {
-    return AccountAggregate.builder()
-      .accountId(accountId)
-      .currentBalance(currentBalance)
-      .maximalBalance(maximalBalance)
-      .build();
-  }
 }
